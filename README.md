@@ -5,7 +5,7 @@ Convenient menu utility to wake/suspend/poweroff a remote rig and seeing if it i
 ### Features
 
 - macOS menu that:
-  - Shows awake status ![rig-up.png](SwiftBar/rig-up.png) / ![rig-down.png](SwiftBar/rig-down.png) for a rig via Tailscale
+  - Shows awake status ![rig-up.png](SwiftBar/rig-up.png) for a rig via Tailscale
   - Triggers:
     - Wake-on-LAN via a server 
     - Suspend/Poweroff via a dedicated SSH key limited to these functions 
