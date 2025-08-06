@@ -30,8 +30,8 @@ Convenient menu utility to wake/suspend/poweroff a remote rig and seeing if it i
 ### Prerequisites
 
 1. Install [SwiftBar](https://swiftbar.app/).
-2. Install [Tailscale](https://tailscale.com/) on both macOS and your rig.
-3. Ensure both devices are configured to connect to your Tailscale network. 
+2. Install [Tailscale](https://tailscale.com/) on macOS, the WOL server, and your rig.
+3. Ensure all three devices are configured to connect to your Tailscale network. 
 
 ### Installation
 
