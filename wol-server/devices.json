@@ -1,0 +1,9 @@
+{
+    "devices": {
+        "rig": {
+            "name": "rig",
+            "mac": "aa:bb:cc:dd:ee:ff",
+            "description": "rig"
+        }
+    }
+}

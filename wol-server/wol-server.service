@@ -1,0 +1,17 @@
+[Unit]
+Description=Wake-on-LAN Server
+After=network.target tailscaled.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/wol/wol_server.py
+WorkingDirectory=/home/wol
+User=wol
+Group=wol
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
