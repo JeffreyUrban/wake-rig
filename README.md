@@ -1,8 +1,14 @@
-# wake-rig
+# A macOS remote power menu for your Linux rig
 
-Convenient menu utility for waking a remote rig and seeing if it is awake from macOS consisting of:
-- Wake-on-LAN server: HTTP server for sending WoL packets to target devices 
-- macOS SwiftBar plugin: Menu that shows awake status ![rig-up.png](SwiftBar/rig-up.png) / ![rig-down.png](SwiftBar/rig-down.png) for a rig via Tailscale and triggers wake 
+Convenient menu utility to wake/suspend/poweroff a remote rig and seeing if it is awake from macOS
+
+### Features
+
+- macOS menu that:
+  - Shows awake status ![rig-up.png](SwiftBar/rig-up.png) / ![rig-down.png](SwiftBar/rig-down.png) for a rig via Tailscale
+  - Triggers:
+    - Wake-on-LAN via a server 
+    - Suspend/Poweroff via a dedicated SSH key limited to these functions 
 
 ## Prerequisites 
 
@@ -16,8 +22,27 @@ Convenient menu utility for waking a remote rig and seeing if it is awake from m
 ## Overview
 
 1. Set up the WoL server on a dev board (like a Raspberry Pi) or other server you leave on, on the same network as your target rig.
-2. Configure your target machine for Wake-on-LAN.
+2. Configure your target machine for Wake-on-LAN and suspend/poweroff via a dedicated SSH key.
 3. Install the SwiftBar plugin on macOS for menu bar control. 
+
+## macOS SwiftBar Plugin
+
+### Prerequisites
+
+1. Install [SwiftBar](https://swiftbar.app/).
+2. Install [Tailscale](https://tailscale.com/) on both macOS and your rig.
+3. Ensure both devices are configured to connect to your Tailscale network. 
+
+### Installation
+
+1. Copy `SwiftBar/plugins/rig.10s.sh` to your SwiftBar plugins directory (i.e. `~/.swiftbar/plugins`).
+2. Enable script permissions: `chmod +x rig.10s.sh`
+3. Edit the script and replace `your-wol-server:8000` with your server's address. 
+4. Create an SSH key for swiftbar to request suspend/poweroff:
+
+   `ssh-keygen -f /Users/username/.swiftbar/ssh/id_swiftbar -C "swiftbar-key" -N ""`
+
+6. Refresh SwiftBar or restart it.
 
 ## Wake-on-LAN Server Setup
 
@@ -101,7 +126,7 @@ sudo systemctl status wol-server
 1. Enable "Wake on LAN" or "Power On by PCI-E" in BIOS/UEFI
 2. Ensure "ErP Ready" is disabled (if present)
 
-### Linux Configuration
+### Wake-on-LAN Linux Configuration
 
 Here, running Ubuntu. Adjust as necessary for other operating systems. 
 
@@ -118,35 +143,27 @@ echo 'ethtool -s eth0 wol g' | sudo tee -a /etc/rc.local
 
 For more detailed Linux setup, see: https://www.cyberciti.biz/tips/linux-send-wake-on-lan-wol-magic-packets.html
 
-### Optional: Hibernate Setup
+### Remote Suspend and Poweroff Linux Configuration 
 
-```bash
-# Install power management tools
-sudo apt install powermanagement-interface
+1. Enable passwordless access to suspend and poweroff:
 
-# Hibernate remotely via SSH
-sudo pmi action hibernate
-```
+Add lines at end of your `sudoers` file via `sudo visudo` (replace `username` with your username):
 
-## macOS SwiftBar Plugin
+    username ALL=(ALL) NOPASSWD: /usr/bin/systemctl suspend
+    username ALL=(ALL) NOPASSWD: /usr/bin/systemctl poweroff
 
-### Prerequisites
+2. Allow SSH using the swiftbar-key to perform suspend, poweroff (and nothing else). 
 
-1. Install [SwiftBar](https://swiftbar.app/).
-2. Install [Tailscale](https://tailscale.com/) on both macOS and your rig.
-3. Ensure both devices are configured to connect to your Tailscale network. 
+Add lines at the beginning of `~/.ssh/authorized_keys`
 
-### Installation
+    command="/usr/bin/sudo /usr/bin/systemctl suspend",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_swiftbar.pub>
+    command="/usr/bin/sudo /usr/bin/systemctl poweroff",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_swiftbar.pub>
 
-1. Copy `SwiftBar/plugins/rig.10s.sh` to your SwiftBar plugins directory (i.e. `~/.swiftbar/plugins`).
-2. Enable script permissions: `chmod +x rig.10s.sh`
-3. Edit the script and replace `your-wol-server:8000` with your server's address. 
-5. Refresh SwiftBar or restart it.
+Associating the key only with these entries means:
+- The key can only run these commands.
+- They key does not support SSH forwarding or pty allocation.
 
-### Features
-
-- **Rig Awake Status**: Shows green/gray icon based on Tailscale connectivity
-- **Wake Rig**: Click menu item to send wake command to your WoL server
+These functions should work after a reboot. 
 
 ## Troubleshooting
 

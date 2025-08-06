@@ -32,13 +32,22 @@ else
 
 fi
 
+# Menu entries
+# Replace `rig` with the device name configured on your Wake-on-LAN server.
+# Replace `your-wol-server` with your server hostname.
+# Replace `username` with your username.
+
 echo "---"
 
-# Menu entry to request wake of rig
-
-# Replace `rig` with the device name configured on your Wake-on-LAN server).
-# Replace `your-wol-server` with your server hostname.
-wake_rig() {
-    curl -s "http://your-wol-server:8000/wake?device=rig" >/dev/null
-}
+# Menu entry
 echo "Wake rig | bash='curl' param1='-s' param2='http://your-wol-server:8000/wake?device=rig' terminal=false"
+
+echo "---"
+
+# Menu entry
+echo 'Suspend rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_swiftbar" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl suspend" terminal=false'
+
+echo "---"
+
+# Menu entry
+echo 'Poweroff rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_swiftbar" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl poweroff" terminal=false'
