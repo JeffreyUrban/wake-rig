@@ -2,7 +2,7 @@
 
 Convenient menu utility for waking a remote rig and seeing if it is awake from macOS consisting of:
 - Wake-on-LAN server: HTTP server for sending WoL packets to target devices 
-- macOS SwiftBar plugin: Menu that shows awake status for a rig via Tailscale and triggers wake 
+- macOS SwiftBar plugin: Menu that shows awake status ![rig-up.png](SwiftBar/rig-up.png) / ![rig-down.png](SwiftBar/rig-down.png) for a rig via Tailscale and triggers wake 
 
 ## Prerequisites 
 
