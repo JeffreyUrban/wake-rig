@@ -38,9 +38,11 @@ Convenient menu utility to wake/suspend/poweroff a remote rig and seeing if it i
 1. Copy `SwiftBar/plugins/rig.10s.sh` to your SwiftBar plugins directory (i.e. `~/.swiftbar/plugins`).
 2. Enable script permissions: `chmod +x rig.10s.sh`
 3. Edit the script and replace `your-wol-server:8000` with your server's address. 
-4. Create an SSH key for swiftbar to request suspend/poweroff:
+4. Create SSH keys for swiftbar to request suspend/poweroff/reboot (replace `<rig>` with your rig name):
 
-   `ssh-keygen -f /Users/username/.swiftbar/ssh/id_swiftbar -C "swiftbar-key" -N ""`
+   `ssh-keygen -f /Users/username/.swiftbar/ssh/id_<rig>-suspend -C "<rig>-suspend" -N ""`
+   `ssh-keygen -f /Users/username/.swiftbar/ssh/id_<rig>-poweroff -C "<rig>-poweroff" -N ""`
+   `ssh-keygen -f /Users/username/.swiftbar/ssh/id_<rig>-reboot -C "<rig>-reboot" -N ""`
 
 6. Refresh SwiftBar or restart it.
 
@@ -151,13 +153,15 @@ Add lines at end of your `sudoers` file via `sudo visudo` (replace `username` wi
 
     username ALL=(ALL) NOPASSWD: /usr/bin/systemctl suspend
     username ALL=(ALL) NOPASSWD: /usr/bin/systemctl poweroff
+    username ALL=(ALL) NOPASSWD: /usr/bin/systemctl reboot
 
 2. Allow SSH using the swiftbar-key to perform suspend, poweroff (and nothing else). 
 
 Add lines at the beginning of `~/.ssh/authorized_keys`
 
-    command="/usr/bin/sudo /usr/bin/systemctl suspend",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_swiftbar.pub>
-    command="/usr/bin/sudo /usr/bin/systemctl poweroff",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_swiftbar.pub>
+    command="/usr/bin/sudo /usr/bin/systemctl suspend",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_qube-suspend.pub>
+    command="/usr/bin/sudo /usr/bin/systemctl poweroff",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_qube-poweroff.pub>
+    command="/usr/bin/sudo /usr/bin/systemctl reboot",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <content of id_qube-reboot.pub>
 
 Associating the key only with these entries means:
 - The key can only run these commands.
