@@ -45,9 +45,14 @@ echo "Wake rig | bash='curl' param1='-s' param2='http://your-wol-server:8000/wak
 echo "---"
 
 # Menu entry
-echo 'Suspend rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_swiftbar" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl suspend" terminal=false'
+echo 'Suspend rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_<rig>-suspend" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl suspend" terminal=false'
 
 echo "---"
 
 # Menu entry
-echo 'Poweroff rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_swiftbar" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl poweroff" terminal=false'
+echo 'Poweroff rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_<rig>-poweroff" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl poweroff" terminal=false'
+
+echo "---"
+
+# Menu entry
+echo 'Reboot rig | bash="/usr/bin/ssh" param1="-i" param2="/Users/username/.swiftbar/ssh/id_<rig>-reboot" param3="username@rig" param4="/usr/bin/sudo /usr/bin/systemctl reboot" terminal=false'
